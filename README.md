@@ -1,8 +1,8 @@
 # Yts (YouTube Summarize)
 
-![](demo.gif)
-
 **Yts** is an open source Elixir Phoenix LiveView prototype that takes a YouTube video and generates a textual summary. It uses modern ML tools like OpenAI Whisper and Facebook's BART for transcription and summarization.
+
+![preview gif](demo.gif)
 
 ## How it works
 
