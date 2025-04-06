@@ -1,0 +1,117 @@
+<Layouts.flash_group flash={@flash} />
+<div class="bg-base-200 min-h-screen flex items-center justify-center">
+  <div class="container mx-auto p-6 max-w-xl bg-base-100 shadow-xl rounded-2xl space-y-6">
+    <h1 class="text-2xl font-bold text-center">YouTube Summarizer</h1>
+
+    <.form class="form-control" for={@form} phx-change="validate" phx-submit="submit">
+      <.input
+        type="text"
+        name="url"
+        label="YouTube URL"
+        field={@form[:url]}
+        placeholder="https://www.youtube.com/watch?v=..."
+      />
+
+      <span if={@error} class="text-red-500 text-sm block mb-[12px]">{@error}</span>
+      <button disabled={@error || @url == ""} class="btn btn-soft btn-primary w-full">
+        Submit
+      </button>
+    </.form>
+
+    <div class={"space-y-4 #{if !@dl.loading and !@dl.ok?, do: "hidden"}"}>
+      <div id="thumbnail" class="">
+        <img
+          id="video-thumb"
+          src={"https://img.youtube.com/vi/#{extract_yt_id(@url)}/maxresdefault.jpg"}
+          alt="Video Thumbnail"
+          class="rounded-xl mx-auto"
+        />
+      </div>
+
+      <ul class="timeline justify-center">
+        <li>
+          <div class="timeline-start timeline-box">downloading</div>
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class={"#{if @stage >= 0, do: "text-primary"} h-5 w-5"}
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <hr class={if @stage >= 1, do: "bg-primary"} />
+        </li>
+        <li>
+          <hr class={if @stage >= 1, do: "bg-primary"} />
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class={"#{if @stage >= 1, do: "text-primary"} h-5 w-5"}
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="timeline-end timeline-box">translating</div>
+          <hr class={if @stage >= 2, do: "bg-primary"} />
+        </li>
+        <li>
+          <hr class={if @stage >= 2, do: "bg-primary"} />
+          <div class="timeline-start timeline-box">summarizing</div>
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class={"#{if @stage >= 2, do: "text-primary"} h-5 w-5"}
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <hr class={if @stage >= 3, do: "bg-primary"} />
+        </li>
+        <li>
+          <hr class={if @stage >= 3, do: "bg-primary"} />
+          <div class="timeline-middle">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 20 20"
+              fill="currentColor"
+              class={"#{if @stage >= 3, do: "text-primary"} h-5 w-5"}
+            >
+              <path
+                fill-rule="evenodd"
+                d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                clip-rule="evenodd"
+              />
+            </svg>
+          </div>
+          <div class="timeline-end timeline-box">done!</div>
+        </li>
+      </ul>
+      <div>
+        <div class="flex w-full flex-col">
+          <div class="divider">Summary</div>
+          <progress class={"progress progress-primary w-full #{if @dl.result != nil, do: "hidden"}"}>
+          </progress>
+          <p>{@dl.result}</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

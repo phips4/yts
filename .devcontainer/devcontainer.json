@@ -1,0 +1,20 @@
+{
+  "name": "Yts",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "dev",
+  "workspaceFolder": "/workspace",
+
+  "customizations": {
+    "vscode": {
+     "settings": {
+      "terminal.integrated.shell.linux": "/bin/bash"
+     },
+     "extensions": [
+      "dbaeumer.vscode-eslint",
+      "jakebecker.elixir-ls",
+      "austenc.tailwind-docs",
+      "bradlc.vscode-tailwindcss"
+     ]
+    }
+   }
+}
