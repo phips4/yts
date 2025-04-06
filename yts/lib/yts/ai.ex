@@ -11,7 +11,7 @@ defmodule Yts.Ai do
     |> Enum.join(" ")
   end
 
-  def speech_to_text(path) do
+  def speech_to_text(path, language) do
     {:ok, stat} = Yts.Mp3Stat.parse(path)
     chunk_time = 60
 
@@ -20,7 +20,7 @@ defmodule Yts.Ai do
       fn ss ->
         args = ~w(-ac 1 -ar 16k -f f32le -ss #{ss} -t #{chunk_time} -v quiet -)
         {data, 0} = System.cmd("ffmpeg", ["-i", path] ++ args)
-        Nx.Serving.batched_run({:local, Yts.WhisperServing}, Nx.from_binary(data, :f32))
+        Nx.Serving.batched_run({:local, Yts.WhisperServing}, %{audio: Nx.from_binary(data, :f32), language: language})
       end,
       max_concurrency: 4,
       timeout: :infinity

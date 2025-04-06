@@ -13,6 +13,8 @@
       />
 
       <span if={@error} class="text-red-500 text-sm block mb-[12px]">{@error}</span>
+      <.input type="select" name="language" label="language" field={@form[:language]} options={[:en, :de]}>
+      </.input>
       <button disabled={@error || @url == ""} class="btn btn-soft btn-primary w-full">
         Submit
       </button>

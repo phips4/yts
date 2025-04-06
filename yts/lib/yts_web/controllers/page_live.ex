@@ -15,12 +15,13 @@ defmodule YtsWeb.PageLive do
   end
 
   @impl true
-  def handle_event("submit", %{"url" => url}, socket) do
+  def handle_event("submit", %{"url" => url, "language" => language}, socket) do
     parent = self()
 
     {:noreply,
      socket
      |> assign(:url, url)
+     |> assign(:language, language)
      |> assign(:dl, nil)
      |> assign_async(:dl, fn ->
        options = [
@@ -36,7 +37,7 @@ defmodule YtsWeb.PageLive do
        file = String.replace_trailing(file, ".webm", ".mp3")
 
        send(parent, %{stage: 1})
-       text = Yts.Ai.speech_to_text(file)
+       text = Yts.Ai.speech_to_text(file, language)
 
        send(parent, %{stage: 2})
        summary = Yts.Ai.summarize_text(text)
@@ -54,6 +55,12 @@ defmodule YtsWeb.PageLive do
     else
       {:noreply, socket |> assign(url: url, error: "Invalid YouTube URL")}
     end
+  end
+
+  @impl true
+  def handle_event("validate", %{"_target" => ["language"], "language" => language}, socket) do
+    IO.puts "changed language: #{language}"
+      {:noreply, socket}
   end
 
   def extract_yt_id(url) when is_bitstring(url) do
